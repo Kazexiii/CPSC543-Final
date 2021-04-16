@@ -43,7 +43,7 @@ private final ScheduledExecutorService scheduler      = Executors.newScheduledTh
 ControlP5 cp5;
 import grafica.*;
 GPlot plot;
-
+TTS tts;
 
 /* device block definitions ********************************************************************************************/
 Board             haplyBoard;
@@ -169,122 +169,148 @@ void setup(){
   /* put setup code here, run once: */
   
   /* screen size definition */
-  size(1000, 700);
+  size(1000, 650);
   
   drawScatter();
-     
+  tts = new TTS();
+  
   table = loadTable("data.csv", "header");
    
   /* GUI setup */
     smooth();
   cp5 = new ControlP5(this);
-  cp5.addTextlabel("Prop")
-                    .setText("Gain for P(roportional)")
-                    .setPosition(0,0)
-                    .setColorValue(color(255,0,0))
-                    .setFont(createFont("Georgia",20))
-                    ;
-  cp5.addKnob("P")
-               .setRange(0,2)
-               .setValue(0)
-               .setPosition(50,25)
-               .setRadius(50)
-               .setDragDirection(Knob.VERTICAL);
+  //cp5.addTextlabel("Prop")
+  //                  .setText("Gain for P(roportional)")
+  //                  .setPosition(0,0)
+  //                  .setColorValue(color(255,0,0))
+  //                  .setFont(createFont("Georgia",20))
+  //                  ;
+  //cp5.addKnob("P")
+  //             .setRange(0,2)
+  //             .setValue(0)
+  //             .setPosition(50,25)
+  //             .setRadius(50)
+  //             .setDragDirection(Knob.VERTICAL);
                
-  cp5.addButton("ResetIntegrator")
+  //cp5.addButton("ResetIntegrator")
+  //   .setValue(0)
+  //   .setPosition(5,360)
+  //   .setSize(200,50)
+  //   ;
+  //cp5.addTextlabel("Deriv")
+  //                  .setText("Gain for D(erivative)")
+  //                  .setPosition(0,125)
+  //                  .setColorValue(color(255,0,0))
+  //                  .setFont(createFont("Georgia",20))
+  //                  ;
+  //cp5.addKnob("D")
+  //             .setRange(0,4)
+  //             .setValue(0)
+  //             .setPosition(50,150)
+  //             .setRadius(50)
+  //             .setDragDirection(Knob.VERTICAL)
+  //             ; 
+  //cp5.addTextlabel("Deriv filt")
+  //                  .setText("Exponential filter for Diff")
+  //                  .setPosition(0,250)
+  //                  .setColorValue(color(255,0,0))
+  //                  .setFont(createFont("Georgia",18))
+  //                  ;  
+  //cp5.addSlider("smoothing")
+  //   .setPosition(5,275)
+  //   .setSize(200,20)
+  //   .setRange(0,1)
+  //   .setValue(0.8)
+  //   ;
+  //cp5.addTextlabel("Loop time")
+  //                  .setText("Loop time")
+  //                  .setPosition(0,300)
+  //                  .setColorValue(color(255,0,0))
+  //                  .setFont(createFont("Georgia",20))
+  //                  ;  
+  //cp5.addSlider("looptime")
+  //   .setPosition(5,330)
+  //   .setWidth(200)
+  //   .setRange(250,4000) // values can range from big to small as well
+  //   .setValue(500)
+  //   .setNumberOfTickMarks(16)
+  //   .setSliderMode(Slider.FLEXIBLE)
+  //   ;       
+//Textfield myTextfield;
+//PFont font = createFont("arial", 30);
+
+PFont font = createFont("arial", 30);
+ 
+    cp5.addButton("Mode_0_Navigate")
      .setValue(0)
-     .setPosition(5,360)
+     .setPosition(10,20)
      .setSize(200,50)
      ;
+    
+    cp5.addButton("Mode_1_Roam_Vibrotactile")
+     .setValue(0)
+     .setPosition(10, 80)
+     .setSize(200,50)
+     ;
+     
+     cp5.addButton("Mode_2_Roam_FF")
+     .setValue(0)
+     .setPosition(10, 140)
+     .setSize(200,50)
+     ;
+    cp5.addButton("Mode_3_Story")
+     .setValue(0)
+     .setPosition(10, 200)
+     .setSize(200,50)
+     ;
+         
+    cp5.addTextfield("myTextfield")
+    .setPosition(10, 300)
+    .setSize(200,50)
+    .setFont(font);
+    
   cp5.addButton("Somalia")
      .setValue(0)
-     .setPosition(220,620)
+     .setPosition(10, 360)
      .setSize(200,50)
      ;
   cp5.addButton("UnitedStates")
      .setValue(0)
-     .setPosition(430,620)
+     .setPosition(10, 420)
      .setSize(200,50)
      ;
-  cp5.addButton("Mean")
+  //cp5.addButton("Mean")
+  //   .setValue(0)
+  //   .setPosition(10, 480)
+  //   .setSize(200,50)
+  //   ;
+
+  cp5.addButton("ResetDevice")
      .setValue(0)
-     .setPosition(850,620)
-     .setSize(100,50)
+     .setPosition(10, 480)
+     .setSize(200,50)
      ;
      
-//Textfield myTextfield;
-PFont font = createFont("arial", 30);
+//Textfield myTextfield
 
-  cp5.addTextfield("myTextfield")
-  .setPosition(640,620)
-  .setSize(200,50)
-  .setFont(font);
+  //cp5.addTextfield("myTextfield")
+  //.setPosition(640,620)
+  //.setSize(200,50)
+  //.setFont(font);
 
   cp5.addTextlabel("countryName")
                     .setText("Type country name..")
-                    .setPosition(635,600)
+                    .setPosition(20, 280)
                     .setColorValue(color(255,0,0))
                     .setFont(createFont("Georgia",13))
                     ;  
   
-  cp5.addButton("ResetDevice")
-     .setValue(0)
-     .setPosition(5,420)
-     .setSize(200,50)
-     ;
-  cp5.addTextlabel("Deriv")
-                    .setText("Gain for D(erivative)")
-                    .setPosition(0,125)
-                    .setColorValue(color(255,0,0))
-                    .setFont(createFont("Georgia",20))
-                    ;
-  cp5.addKnob("D")
-               .setRange(0,4)
-               .setValue(0)
-               .setPosition(50,150)
-               .setRadius(50)
-               .setDragDirection(Knob.VERTICAL)
-               ; 
-  cp5.addTextlabel("Deriv filt")
-                    .setText("Exponential filter for Diff")
-                    .setPosition(0,250)
-                    .setColorValue(color(255,0,0))
-                    .setFont(createFont("Georgia",18))
-                    ;  
-  cp5.addSlider("smoothing")
-     .setPosition(5,275)
-     .setSize(200,20)
-     .setRange(0,1)
-     .setValue(0.8)
-     ;
-  cp5.addTextlabel("Loop time")
-                    .setText("Loop time")
-                    .setPosition(0,300)
-                    .setColorValue(color(255,0,0))
-                    .setFont(createFont("Georgia",20))
-                    ;  
-  cp5.addSlider("looptime")
-     .setPosition(5,330)
-     .setWidth(200)
-     .setRange(250,4000) // values can range from big to small as well
-     .setValue(500)
-     .setNumberOfTickMarks(16)
-     .setSliderMode(Slider.FLEXIBLE)
-     ;       
-//Textfield myTextfield;
-//PFont font = createFont("arial", 30);
-
-  cp5.addTextfield("myTextfield")
-  .setPosition(640,620)
-  .setSize(200,50)
-  .setFont(font);
-  
-  cp5.addButton("ResetDevice")
-     .setValue(0)
-     .setPosition(10,620)
-     .setSize(200,50)
-     ;
-  
+  //cp5.addButton("ResetDevice")
+  //   .setValue(0)
+  //   .setPosition(10,420)
+  //   .setSize(200,50)
+  //   ;    
+    
   /* device setup */
   
   /**  
@@ -317,6 +343,9 @@ PFont font = createFont("arial", 30);
   /* create pantagraph graphics */
   create_pantagraph();
   
+    P = 0.12;
+    D = 0.50;
+    Mean();
   
   target = createShape(ELLIPSE, 0,0, 20, 20);
   target.setStroke(color(0));
@@ -371,12 +400,67 @@ PFont font = createFont("arial", 30);
 }
 /* end setup section ***************************************************************************************************/
 
-public void Mean(int theValue) {
+public void Mean() {
   markerFromCoords(mean_income, mean_lifeExp);
 }
 
 public void Somalia(int theValue) {
   markerFromCoords(624, 58.7);
+}
+
+int timer;
+int count = 0;
+int DUR = 3000;
+
+int c0 = 0;
+int c1 = 0;
+int c2 = 0;
+
+public void Mode_0_Navigate()
+{
+    c0++;
+    if (c0 <= 1)
+      return;
+      
+    mode = 0;
+    P = 0.12;
+    D = 0.50;
+    xr = 0.53341675; yr = -0.41296172;
+    //thread("SimulationThread");
+}
+
+public void Mode_1_Roam_Vibrotactile()
+{
+    c1++;
+    if (c1 <= 1)
+      return;
+      
+    mode = 1;
+    //thread("SimulationThread");
+    P = 0.00; D = 0.00;
+}
+
+public void Mode_2_Roam_FF()
+{
+    c2++;
+    if (c2 <= 1)
+      return;
+      
+    mode = 2;
+    P = 0.00; D = 0.00;
+    SimulateFric st = new SimulateFric();
+    scheduler.scheduleAtFixedRate(st, 1, 1, MILLISECONDS);
+}
+
+public void Mode_3_Story(int theValue) {
+  
+  count++;
+  if (count <= 1)
+    return;
+    
+  //thread("SimulationThread");
+  mode = 3;
+  timer = millis(); 
 }
 
 public void UnitedStates(int theValue) {
@@ -414,10 +498,31 @@ public float[] avatarToScatter(float x, float y)
 float[] screen = new float[2];
 float income = 0.0;
 float lifeExp = 0.0;
+
 float total_income = 0.0;
 float total_lifeExp = 0.0;
+
 float mean_income = 0.0;
 float mean_lifeExp = 0.0;
+
+String min_lifeExpName = "";
+float[] min_lifeExp = {0, 100.0};
+
+String max_lifeExpName = "";
+float[] max_lifeExp = new float[2];
+
+String lifeExp25Name = "";
+int index25 = 0;
+float[] lifeExp25 = new float[2];
+
+String median_lifeExpName = "";
+int median_index = 0;
+float[] median_lifeExp = new float[2];
+
+String lifeExp75Name = "";
+int index75 = 0;
+float[] lifeExp75 = new float[2];
+
 String name = "";
 boolean draw = false;
 
@@ -429,6 +534,8 @@ public void myTextfield(String theValue) {
   String[] data = loadStrings("data.csv");
   //float[] screen = new float[2];
   
+  //median_index = data.length % 2 == 0 ? data.length / 2 : (data.length + 1) / 2;
+  
   for (int i = 0; i < data.length - 1; i++)
   {
     if (data[i + 1].toLowerCase().contains(theValue)) 
@@ -438,6 +545,15 @@ public void myTextfield(String theValue) {
       name = tokens[0];
       income  = Float.parseFloat(tokens[1]);   
       lifeExp = Float.parseFloat(tokens[2]); 
+      
+      //if (lifeExp <= min_lifeExp)
+      //  min_lifeExp = lifeExp;
+        
+      //if (lifeExp >= max_lifeExp)
+      //  max_lifeExp = lifeExp;
+        
+      //if (i == median_index)
+      //  median_index = lifeExp;
       
       screen = plot.getScreenPosAtValue(income, lifeExp);
       draw = true;
@@ -450,7 +566,7 @@ public void myTextfield(String theValue) {
  
   xr = (s_x - 500.661) / 300.61;
   yr = (s_y - 350.1734) / 298;
-  println(theValue);
+  //println(theValue);
 }
 
 public void RandomPosition(int theValue) {
@@ -477,25 +593,31 @@ public void ResetDevice(int theValue) {
 /// Antoine: this is specific to qwerty keyboard layout, you may want to adapt
 
 void keyPressed() {
-  if (key == '1')
-  {
-    mode = 1;
-    thread("SimulationThread");
-  }
-  else if (key == '0')
-  {
-    mode = 0;
-    thread("SimulationThread");
-  }
-  else if (key == '2')
-  {
-    mode = 2;
-    SimulateFric st = new SimulateFric();
-    scheduler.scheduleAtFixedRate(st, 1, 1, MILLISECONDS);
-  }
+  //if (key == '1')
+  //{
+  //  mode = 1;
+  //  thread("SimulationThread");
+  //  P = 0.00; D = 0.00;
+  //}
+  //else if (key == '0')
+  //{
+  //  mode = 0;
+  //  P = 0.12;
+  //  D = 0.50;
+  //  xr = 0.53341675; yr = -0.41296172;
+  //  thread("SimulationThread");
+  //}
+  //else if (key == '2')
+  //{
+  //  mode = 2;
+  //  P = 0.00; D = 0.00;
+  //  SimulateFric st = new SimulateFric();
+  //  scheduler.scheduleAtFixedRate(st, 1, 1, MILLISECONDS);
+  //}
 }
 
 float[] distances = new float[2];
+int story_state = -1;
   
 /* draw section ********************************************************************************************************/
 void draw(){
@@ -523,7 +645,7 @@ void draw(){
     plot.drawAnnotation("Income: " + income, 80794, 53, CENTER, CENTER);
     plot.drawAnnotation("Life Expectancy: " + lifeExp, 80794, 51, CENTER, CENTER);
   }
-  plot.endDraw();
+  //plot.endDraw();
   
   if (mode == 0)
     wave.setAmplitude(0.0f);
@@ -568,8 +690,91 @@ void draw(){
       println(damping);  
       s.h_avatar.setDamping(damping);
   }
-  
+  else if (mode == 3) //story guidance mode?
+  {
+    if (millis() - timer < DUR + 1000)
+    {
+      //if (story_state != 0)
+      //{
+      //  tts.speak("Minimum Value");
+      //  story_state = 0;
+      //}
+      plot.drawAnnotation("Minimum Life Expectancy", 80794, 57, CENTER, CENTER);
+      markerFromCoords(min_lifeExp[0], min_lifeExp[1]);
+      annotateName(min_lifeExpName, min_lifeExp[0], min_lifeExp[1]);
+      
+      //plot.drawAnnotation("Minimum", 80794, 57, CENTER, CENTER);
+    }
+    else if (millis() - timer < 2 * DUR)
+    {
+      plot.drawAnnotation("Maximum Life Expectancy", 80794, 57, CENTER, CENTER);
+      markerFromCoords(max_lifeExp[0], max_lifeExp[1]);
+      annotateName(max_lifeExpName, max_lifeExp[0], max_lifeExp[1]);
+      //plot.drawAnnotation("Maximum Life Expectancy", 80794, 57, CENTER, CENTER);
+      //plot.drawAnnotation("Maximum", max_lifeExp[0], max_lifeExp[1] + 3, CENTER, CENTER);
+      //if (story_state != 1)
+      //{
+      //  tts.speak("Maximum Value");
+      //  story_state = 1;
+      //}
+    }
+    else if (millis() - timer < 3 * DUR)
+    {
+      plot.drawAnnotation("Median Life Expectancy", 80794, 57, CENTER, CENTER);
+      markerFromCoords(median_lifeExp[0], median_lifeExp[1]);
+      annotateName(median_lifeExpName, median_lifeExp[0], median_lifeExp[1]);
+      //plot.drawAnnotation("Minimum Life Expectancy", 80794, 57, CENTER, CENTER);
+      
+      //      plot.drawAnnotation("Median", median_lifeExp[0], median_lifeExp[1] + 3, CENTER, CENTER);
+      //if (story_state != 2)
+      //{
+      //  tts.speak("Median Value");
+      //  story_state = 2;
+      //}
+    }
+    else if (millis() - timer < 4 * DUR)
+    {
+      plot.drawAnnotation("Mean Life Expectancy", 80794, 57, CENTER, CENTER);
+      markerFromCoords(mean_income, mean_lifeExp);
+      annotateName("-", mean_income, mean_lifeExp);
+      //if (story_state != 3)
+      //{
+      //  tts.speak("Mean Value");
+      //  story_state = 3;
+      //}
+    }
+    else if (millis() - timer < 5 * DUR)
+    {
+      plot.drawAnnotation("25th percentile Life Expectancy", 80794, 57, CENTER, CENTER);
+      markerFromCoords(lifeExp25[0], lifeExp25[1]);
+      annotateName(lifeExp25Name, lifeExp25[0], lifeExp25[1]);
+      //if (story_state != 4)
+      //{
+      //  tts.speak("25th percentile value");
+      //  story_state = 4;
+      //}
+    }
+    else if (millis() - timer < 6 * DUR)
+    {
+      plot.drawAnnotation("75th percentile", 80794, 57, CENTER, CENTER);
+      markerFromCoords(lifeExp75[0], lifeExp75[1]);
+      annotateName(lifeExp75Name, lifeExp75[0], lifeExp75[1]);
+      //if (story_state != 5)
+      //{
+      //  tts.speak("75th percentile value");
+      //  story_state = 5;
+      //}
+    }
   }
+plot.endDraw();  
+  }
+}
+
+public void annotateName(String name, float income, float lifeExp)
+{
+    plot.drawAnnotation("Country: " + name, 80794, 55, CENTER, CENTER);
+    plot.drawAnnotation("Income: " + income, 80794, 53, CENTER, CENTER);
+    plot.drawAnnotation("Life Expectancy: " + lifeExp, 80794, 51, CENTER, CENTER);
 }
 
 int k = 1 * 10^6;
@@ -735,7 +940,12 @@ void drawScatter()
 
   // Save the data in one GPointsArray and calculate the point sizes
   GPointsArray points = new GPointsArray();
-  float[] pointSizes = new float[table.getRowCount()];
+  int dataset_length = table.getRowCount();
+  float[] pointSizes = new float[dataset_length];
+  
+  median_index = dataset_length % 2 == 0 ? dataset_length / 2 : (dataset_length + 1) / 2;
+  index25 = round(0.25 * dataset_length);
+  index75 = round(0.75 * dataset_length);
   
   for (int row = 0; row < table.getRowCount(); row++) {
     String country = table.getString(row, "country");
@@ -750,11 +960,33 @@ void drawScatter()
     // The point area should be proportional to the country population
     // population = pi * sq(diameter/2) 
     pointSizes[row] = 2 * sqrt(population/(200000 * PI));
+   
+    if (health <= min_lifeExp[1])
+    {min_lifeExp[0] = income; min_lifeExp[1] = health; min_lifeExpName = country;}
+      
+    if (health >= max_lifeExp[1])
+    {max_lifeExp[0] = income; max_lifeExp[1] = health; max_lifeExpName = country;}
+      
+    if (row == median_index)
+    {median_lifeExp[0] = income; median_lifeExp[1] = health; median_lifeExpName = country;}
+    
+    if (row == index25)
+    {lifeExp25[0] = income; lifeExp25[1] = health; lifeExp25Name = country;}
+    
+    if (row == index75)
+    {lifeExp75[0] = income; lifeExp75[1] = health; lifeExp75Name = country;}
   }
   
   mean_income = total_income / pointSizes.length;
   mean_lifeExp = total_lifeExp / pointSizes.length;
-
+  
+  //println(min_lifeExp[1]);
+  //println(max_lifeExp[1]);
+  //println(median_lifeExp[1]);
+  //println(lifeExp25[1]);
+  //println(lifeExp75[1]);
+  
+  //print(
   // Create the plot
   plot = new GPlot(this);
   plot.setDim(650, 500);
