@@ -95,6 +95,9 @@ PImage            haplyAvatar,pac2;
 
 
 private float[] barValues = {7, 4, 8, 0.5, 0.1}; // barchart values
+int duration[] = {0, 2, 9, 1, 100, 500}; //new int[barValues.length];
+int mode = 1;
+  
 BarChart barChart;
 
 //SoundFile sound; 
@@ -106,6 +109,8 @@ void setup(){
   
   /* screen size definition */
   size(900, 600);
+      
+
   //sound = new SoundFile(this, "beep-03.wav");
   /* device setup */
   
@@ -118,7 +123,7 @@ void setup(){
    *      linux:        haplyBoard = new Board(this, "/dev/ttyUSB0", 0);
    *      mac:          haplyBoard = new Board(this, "/dev/cu.usbmodem1411", 0);
    */ 
-  haplyBoard          = new Board(this, "COM4", 0);
+  haplyBoard          = new Board(this, "COM7", 0);
   widgetOne           = new Device(widgetOneID, haplyBoard);
   pantograph          = new Pantograph();
   
@@ -348,10 +353,16 @@ void keyPressed() {
       world.remove(wall10);
       world.remove(wall11);
       k = "Mode 1"; 
+      mode = 1;
 
    
   }
-  if (key == '2') 
+  if (key == '2')
+  { mode = 2; k = "Mode 2"; }
+  if (key == '3')
+  { mode = 3; k = "Mode 3"; }
+    
+  if (mode == 2 || mode == 3) 
   {
       wall7                   = new FBox(3, 9.1);
       wall7.setPosition(2.3, 8.5);
@@ -417,10 +428,14 @@ void keyPressed() {
       world.remove(wall4);
       world.remove(wall5);
       world.remove(wall6);
-      k = "Mode 2"; 
+      //k = "Mode 2"; 
+      //mode = 2;
 
   }
   }
+  
+float tLastChange = Float.NEGATIVE_INFINITY;
+int index = 0;
 
 /* simulation section **************************************************************************************************/
 class SimulationThread implements Runnable{
@@ -450,11 +465,39 @@ class SimulationThread implements Runnable{
     fEE.div(100000); //dynes to newtons
     
     
-    if (s.h_avatar.isTouchingBody(wall7) || s.h_avatar.isTouchingBody(wall8) || s.h_avatar.isTouchingBody(wall9) || s.h_avatar.isTouchingBody(wall10) || s.h_avatar.isTouchingBody(wall11)) {
-      s.h_avatar.setDamping(700);
+    if (mode == 2)
+    {
+      if (s.h_avatar.isTouchingBody(wall7) || s.h_avatar.isTouchingBody(wall8) || s.h_avatar.isTouchingBody(wall9) || s.h_avatar.isTouchingBody(wall10) || s.h_avatar.isTouchingBody(wall11)) //{
+        s.h_avatar.setDamping(700);
+    }
+    else if (mode == 3)
+    {
+      println("index: " + index + ", duration: " + duration[index]);
+
+      if (s.h_avatar.isTouchingBody(wall7))
+        index = 1;
+      else if (s.h_avatar.isTouchingBody(wall8))
+        index = 2;
+      else if (s.h_avatar.isTouchingBody(wall9))
+        index = 3;
+      else if (s.h_avatar.isTouchingBody(wall10))
+        index = 4;
+      else if (s.h_avatar.isTouchingBody(wall11))
+        index = 5;
+      else
+        index = 0;
+        
+      if (index != 0 && millis() - tLastChange > duration[index]) 
+      {
+        tLastChange = millis();
+        fEE.x = random(-8, 8);
+        fEE.y = random(-8, 8);
+      }     
+     // }
 
       
-    }else {
+    }
+    else {
       s.h_avatar.setDamping(0);
       
     }
