@@ -179,65 +179,6 @@ void setup(){
   /* GUI setup */
     smooth();
   cp5 = new ControlP5(this);
-  //cp5.addTextlabel("Prop")
-  //                  .setText("Gain for P(roportional)")
-  //                  .setPosition(0,0)
-  //                  .setColorValue(color(255,0,0))
-  //                  .setFont(createFont("Georgia",20))
-  //                  ;
-  //cp5.addKnob("P")
-  //             .setRange(0,2)
-  //             .setValue(0)
-  //             .setPosition(50,25)
-  //             .setRadius(50)
-  //             .setDragDirection(Knob.VERTICAL);
-               
-  //cp5.addButton("ResetIntegrator")
-  //   .setValue(0)
-  //   .setPosition(5,360)
-  //   .setSize(200,50)
-  //   ;
-  //cp5.addTextlabel("Deriv")
-  //                  .setText("Gain for D(erivative)")
-  //                  .setPosition(0,125)
-  //                  .setColorValue(color(255,0,0))
-  //                  .setFont(createFont("Georgia",20))
-  //                  ;
-  //cp5.addKnob("D")
-  //             .setRange(0,4)
-  //             .setValue(0)
-  //             .setPosition(50,150)
-  //             .setRadius(50)
-  //             .setDragDirection(Knob.VERTICAL)
-  //             ; 
-  //cp5.addTextlabel("Deriv filt")
-  //                  .setText("Exponential filter for Diff")
-  //                  .setPosition(0,250)
-  //                  .setColorValue(color(255,0,0))
-  //                  .setFont(createFont("Georgia",18))
-  //                  ;  
-  //cp5.addSlider("smoothing")
-  //   .setPosition(5,275)
-  //   .setSize(200,20)
-  //   .setRange(0,1)
-  //   .setValue(0.8)
-  //   ;
-  //cp5.addTextlabel("Loop time")
-  //                  .setText("Loop time")
-  //                  .setPosition(0,300)
-  //                  .setColorValue(color(255,0,0))
-  //                  .setFont(createFont("Georgia",20))
-  //                  ;  
-  //cp5.addSlider("looptime")
-  //   .setPosition(5,330)
-  //   .setWidth(200)
-  //   .setRange(250,4000) // values can range from big to small as well
-  //   .setValue(500)
-  //   .setNumberOfTickMarks(16)
-  //   .setSliderMode(Slider.FLEXIBLE)
-  //   ;       
-//Textfield myTextfield;
-//PFont font = createFont("arial", 30);
 
 PFont font = createFont("arial", 30);
  
@@ -264,52 +205,65 @@ PFont font = createFont("arial", 30);
      .setSize(200,50)
      ;
          
-    cp5.addTextfield("myTextfield")
+    cp5.addTextfield("hapticSearch")
     .setPosition(10, 300)
     .setSize(200,50)
     .setFont(font);
-    
-  cp5.addButton("Somalia")
-     .setValue(0)
-     .setPosition(10, 360)
-     .setSize(200,50)
-     ;
-  cp5.addButton("UnitedStates")
-     .setValue(0)
-     .setPosition(10, 420)
-     .setSize(200,50)
-     ;
-  //cp5.addButton("Mean")
-  //   .setValue(0)
-  //   .setPosition(10, 480)
-  //   .setSize(200,50)
-  //   ;
-
-  cp5.addButton("ResetDevice")
-     .setValue(0)
-     .setPosition(10, 480)
-     .setSize(200,50)
-     ;
-     
-//Textfield myTextfield
-
-  //cp5.addTextfield("myTextfield")
-  //.setPosition(640,620)
-  //.setSize(200,50)
-  //.setFont(font);
+  
 
   cp5.addTextlabel("countryName")
-                    .setText("Type country name..")
-                    .setPosition(20, 280)
+                    .setText("Type country name for haptic search")
+                    .setPosition(1, 280)
                     .setColorValue(color(255,0,0))
                     .setFont(createFont("Georgia",13))
                     ;  
-  
+                        
+  cp5.addTextlabel("countryName2")
+                    .setText("Type country name for visual search")
+                    .setPosition(1, 355)
+                    .setColorValue(color(255,0,0))
+                    .setFont(createFont("Georgia",13))
+                    ;    
+                    
+    cp5.addTextfield("visualSearch")
+    .setPosition(10, 375)
+    .setSize(200,50)
+    .setFont(font);    
+
+  cp5.addButton("ResetDevice")
+     .setValue(0)
+     .setPosition(10, 435)
+     .setSize(200,50)
+     ;
+     
   //cp5.addButton("ResetDevice")
   //   .setValue(0)
   //   .setPosition(10,420)
   //   .setSize(200,50)
   //   ;    
+    
+  //cp5.addButton("Somalia")
+  //   .setValue(0)
+  //   .setPosition(10, 360)
+  //   .setSize(200,50)
+  //   ;
+  
+   //cp5.addButton("Somalia")
+  //   .setValue(0)
+  //   .setPosition(10, 360)
+  //   .setSize(200,50)
+  //   ; 
+  //cp5.addButton("UnitedStates")
+  //   .setValue(0)
+  //   .setPosition(10, 420)
+  //   .setSize(200,50)
+  //   ;
+  //cp5.addButton("Mean")
+  //   .setValue(0)
+  //   .setPosition(10, 480)
+  //   .setSize(200,50)
+  //   ;
+    
     
   /* device setup */
   
@@ -458,9 +412,71 @@ public void Mode_3_Story(int theValue) {
   if (count <= 1)
     return;
     
+    widgetOne.device_set_parameters();
+    P = 0;
+    I = 0;
+    D = 0;
+    widgetOne.set_device_torques(new float[]{0, 0});
+    widgetOne.device_write_torques(); 
+    
   //thread("SimulationThread");
   mode = 3;
   timer = millis(); 
+}
+
+int c3 = 0;
+
+
+
+
+public void visualSearch(String theValue)
+{
+    //c3++;
+    //if (c3 <= 1)
+    //  return;
+      
+    println("W");
+    //plot.setPointColor(222);
+    
+    plot.removeLayer("redVal");
+    float[] ptSizes = new float[1];
+    GPointsArray points1 = new GPointsArray(1);
+    
+    draw = false;
+    theValue = theValue.toLowerCase();
+  
+  String[] data = loadStrings("data.csv");
+
+  
+  for (int i = 0; i < data.length - 1; i++)
+  {
+    if (data[i + 1].toLowerCase().contains(theValue)) 
+    {
+      String[] tokens = data[i+1].split(",");
+  
+      name = tokens[0];
+      print(name);
+      income  = Float.parseFloat(tokens[1]);   
+      lifeExp = Float.parseFloat(tokens[2]);
+      int pop = int(tokens[3]);
+      
+      //screen = 6plot.getScreenPosAtValue(income, lifeExp);
+      //println(screen[0], screen[1]);
+      points1.add(income, lifeExp);
+      ptSizes[0] = 2 * sqrt(pop/(200000 * PI));
+      draw = true;
+      break;
+    }
+  } 
+  
+  println(points1);
+  
+  plot.beginDraw();
+  plot.addLayer("redVal", points1);
+  plot.getLayer("redVal").setPointColor(color(5, 5, 110, 211));
+  plot.getLayer("redVal").setPointSizes(ptSizes);
+  plot.getLayer("redVal").drawPoints();
+  plot.endDraw();
 }
 
 public void UnitedStates(int theValue) {
@@ -526,7 +542,7 @@ float[] lifeExp75 = new float[2];
 String name = "";
 boolean draw = false;
 
-public void myTextfield(String theValue) {
+public void hapticSearch(String theValue) {
   
   draw = false;
   theValue = theValue.toLowerCase();
@@ -545,15 +561,6 @@ public void myTextfield(String theValue) {
       name = tokens[0];
       income  = Float.parseFloat(tokens[1]);   
       lifeExp = Float.parseFloat(tokens[2]); 
-      
-      //if (lifeExp <= min_lifeExp)
-      //  min_lifeExp = lifeExp;
-        
-      //if (lifeExp >= max_lifeExp)
-      //  max_lifeExp = lifeExp;
-        
-      //if (i == median_index)
-      //  median_index = lifeExp;
       
       screen = plot.getScreenPosAtValue(income, lifeExp);
       draw = true;
