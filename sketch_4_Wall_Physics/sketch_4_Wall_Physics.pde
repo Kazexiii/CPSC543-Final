@@ -300,7 +300,7 @@ void draw(){
     barChart.draw(15,-10, width - 30, height - 50);
     textSize(13);
     fill (color(0,0,0));
-    text("Please click on this window and press keys 1 or 2 to change the rendering mode.", 200, 60);
+    text("Please click on this window and press keys 1, 2, or 3 to change the rendering mode.", 200, 60);
     fill (color(255,0,0));
     text(k, 200, 80);
     
